@@ -13,10 +13,11 @@ export interface TranslateQuery {
     detectFrom: string
     detectTo: string
     mode: TranslateMode
-    onMessage: (message: { content: string; role: string }) => void
-    onError: (error: string) => void
-    onFinish: (reason: string) => void
-    signal: AbortSignal
+    // onMessage: (message: { content: string; role: string }) => void
+    // onError: (error: string) => void
+    // onFinish: (reason: string) => void
+    // signal: AbortSignal
+    apiKey: string
 }
 
 export interface TranslateResult {
@@ -147,10 +148,10 @@ export async function translate(query: TranslateQuery) {
         top_p: 1,
         frequency_penalty: 1,
         presence_penalty: 1,
-        stream: true,
+        // stream: true,
     }
 
-    const apiKey = await utils.getApiKey()
+    const apiKey = query.apiKey
     const headers: Record<string, string> = {
         'Content-Type': 'application/json',
     }
@@ -182,62 +183,67 @@ export async function translate(query: TranslateQuery) {
 
     let isFirst = true
 
-    await fetchSSE(`${settings.apiURL}${settings.apiURLPath}`, {
+    // await fetchSSE(`${settings.apiURL}${settings.apiURLPath}`, {
+    //     method: 'POST',
+    //     headers,
+    //     body: JSON.stringify(body),
+    //     signal: query.signal,
+    //     onMessage: (msg) => {
+    //         let resp
+    //         try {
+    //             resp = JSON.parse(msg)
+    //             // eslint-disable-next-line no-empty
+    //         } catch {
+    //             query.onFinish('stop')
+    //             return
+    //         }
+    //         const { choices } = resp
+    //         if (!choices || choices.length === 0) {
+    //             return { error: 'No result' }
+    //         }
+    //         const { finish_reason: finishReason } = choices[0]
+    //         if (finishReason) {
+    //             query.onFinish(finishReason)
+    //             return
+    //         }
+
+    //         let targetTxt = ''
+    //         switch (settings.provider) {
+    //             case 'OpenAI': {
+    //                 const { content = '', role } = choices[0].delta
+    //                 targetTxt = content
+
+    //                 if (trimFirstQuotation && isFirst && targetTxt && ['“', '"', '「'].indexOf(targetTxt[0]) >= 0) {
+    //                     targetTxt = targetTxt.slice(1)
+    //                 }
+
+    //                 if (!role) {
+    //                     isFirst = false
+    //                 }
+
+    //                 query.onMessage({ content: targetTxt, role })
+    //                 break
+    //             }
+    //             case 'Azure':
+    //                 targetTxt = choices[0].text
+    //                 console.log(resp)
+
+    //                 if (trimFirstQuotation && isFirst && targetTxt && ['“', '"', '「'].indexOf(targetTxt[0]) >= 0) {
+    //                     targetTxt = targetTxt.slice(1)
+    //                 }
+
+    //                 query.onMessage({ content: targetTxt, role: '' })
+    //                 break
+    //         }
+    //     },
+    //     onError: (err) => {
+    //         const { error } = err
+    //         query.onError(error.message)
+    //     },
+    // })
+    return fetch(`${settings.apiURL}${settings.apiURLPath}`, {
         method: 'POST',
         headers,
-        body: JSON.stringify(body),
-        signal: query.signal,
-        onMessage: (msg) => {
-            let resp
-            try {
-                resp = JSON.parse(msg)
-                // eslint-disable-next-line no-empty
-            } catch {
-                query.onFinish('stop')
-                return
-            }
-            const { choices } = resp
-            if (!choices || choices.length === 0) {
-                return { error: 'No result' }
-            }
-            const { finish_reason: finishReason } = choices[0]
-            if (finishReason) {
-                query.onFinish(finishReason)
-                return
-            }
-
-            let targetTxt = ''
-            switch (settings.provider) {
-                case 'OpenAI': {
-                    const { content = '', role } = choices[0].delta
-                    targetTxt = content
-
-                    if (trimFirstQuotation && isFirst && targetTxt && ['“', '"', '「'].indexOf(targetTxt[0]) >= 0) {
-                        targetTxt = targetTxt.slice(1)
-                    }
-
-                    if (!role) {
-                        isFirst = false
-                    }
-
-                    query.onMessage({ content: targetTxt, role })
-                    break
-                }
-                case 'Azure':
-                    targetTxt = choices[0].text
-                    console.log(resp)
-
-                    if (trimFirstQuotation && isFirst && targetTxt && ['“', '"', '「'].indexOf(targetTxt[0]) >= 0) {
-                        targetTxt = targetTxt.slice(1)
-                    }
-
-                    query.onMessage({ content: targetTxt, role: '' })
-                    break
-            }
-        },
-        onError: (err) => {
-            const { error } = err
-            query.onError(error.message)
-        },
+        body: JSON.stringify(body)
     })
 }
