@@ -241,6 +241,7 @@ export async function translate(query: TranslateQuery) {
     //         query.onError(error.message)
     //     },
     // })
+    console.log(`body: ${JSON.stringify(body)}`)
     return fetch(`${settings.apiURL}${settings.apiURLPath}`, {
         method: 'POST',
         headers,
