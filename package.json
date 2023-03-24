@@ -35,6 +35,7 @@
     "@types/xregexp": "^4.4.0",
     "@webcomponents/webcomponentsjs": "^2.7.0",
     "baseui-sd": "^12.2.4",
+    "cld": "^2.9.0",
     "cld3-asm": "^3.1.1",
     "clsx": "^1.2.1",
     "electron-store": "^8.1.0",
@@ -69,6 +70,7 @@
     "styletron-react": "^6.1.0",
     "tesseract.js": "^4.0.2",
     "underscore": "^1.13.6",
+    "uuid": "^9.0.0",
     "xregexp": "^5.1.1"
   },
   "devDependencies": {
@@ -83,6 +85,7 @@
     "@types/react-dom": "^18.0.1",
     "@types/tampermonkey": "^4.0.10",
     "@types/underscore": "^1.11.4",
+    "@types/uuid": "^9.0.1",
     "@types/webextension-polyfill": "^0.10.0",
     "@typescript-eslint/eslint-plugin": "^5.54.0",
     "@typescript-eslint/parser": "^5.54.0",

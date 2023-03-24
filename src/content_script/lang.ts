@@ -1,6 +1,7 @@
 /* eslint-disable no-control-regex */
 /* eslint-disable no-misleading-character-class */
 
+import cld from 'cld'
 import { isTraditional } from '../common/traditional-or-simplified'
 import ISO6391 from 'iso-639-1'
 import { invoke } from '@tauri-apps/api/tauri'
@@ -85,23 +86,26 @@ export async function detectLang(text: string): Promise<string | null> {
 
 export async function _detectLang(text: string): Promise<string | null> {
     const detectedText = text.trim()
-    return new Promise((resolve) => {
-        if (isDesktopApp()) {
-            invoke('detect_lang', { text: detectedText }).then((lang) => {
-                if (!lang) {
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    const langName = (window as any).detectLanguage(detectedText)
-                    const langCode = ISO6391.getCode(langName)
-                    resolve(langCode)
-                } else {
-                    resolve(lang as string)
-                }
-            })
-        } else {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            const langName = (window as any).detectLanguage(detectedText)
-            const langCode = ISO6391.getCode(langName)
-            resolve(langCode)
-        }
+    return new Promise(async (resolve) => {
+        const langName = (await cld.detect(detectedText)).languages[0].name
+        const langCode = ISO6391.getCode(langName)
+        resolve(langCode)
+        // if (isDesktopApp()) {
+        //     invoke('detect_lang', { text: detectedText }).then((lang) => {
+        //         if (!lang) {
+        //             // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        //             const langName = (window as any).detectLanguage(detectedText)
+        //             const langCode = ISO6391.getCode(langName)
+        //             resolve(langCode)
+        //         } else {
+        //             resolve(lang as string)
+        //         }
+        //     })
+        // } else {
+        //     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        //     const langName = (window as any).detectLanguage(detectedText)
+        //     const langCode = ISO6391.getCode(langName)
+        //     resolve(langCode)
+        // }
     })
 }
