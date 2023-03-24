@@ -13,11 +13,11 @@ export interface TranslateQuery {
     detectFrom: string
     detectTo: string
     mode: TranslateMode
-    // onMessage: (message: { content: string; role: string }) => void
-    // onError: (error: string) => void
-    // onFinish: (reason: string) => void
-    // signal: AbortSignal
-    apiKey: string
+    onMessage?: (message: { content: string; role: string }) => void
+    onError?: (error: string) => void
+    onFinish?: (reason: string) => void
+    signal?: AbortSignal
+    apiKey?: string
 }
 
 export interface TranslateResult {
