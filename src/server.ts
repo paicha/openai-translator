@@ -8,14 +8,13 @@ const app = express()
 app.use(bodyParser.json())
 
 app.post('/translate', async (req: Request, res: Response) => {
+  console.log('Request received', req.body)
   const translateMode = req.body.translate_mode as TranslateMode
   const text = req.body.text as string
   const detectTo = req.body.detect_to as string
   const apiKey = req.body.api_key as string
   const conversationId = req.body.conversation_id as string
   const detectFrom = (await detectLang(text)) ?? 'en'
-
-  console.log(`Request received: translateMode: ${translateMode}, text: ${text}, detectFrom: ${detectFrom}, detectTo: ${detectTo}, apiKey: ${apiKey}, conversationId: ${conversationId}`)
 
   try {
     const response = await translate({

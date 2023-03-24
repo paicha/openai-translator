@@ -87,7 +87,12 @@ export async function detectLang(text: string): Promise<string | null> {
 export async function _detectLang(text: string): Promise<string | null> {
     const detectedText = text.trim()
     return new Promise(async (resolve) => {
-        const langName = (await cld.detect(detectedText)).languages[0].name
+        let langName: string
+        try {
+            langName = (await cld.detect(detectedText)).languages[0].name
+        } catch {
+            langName = ''
+        }
         const langCode = ISO6391.getCode(langName)
         resolve(langCode)
         // if (isDesktopApp()) {
