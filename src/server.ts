@@ -45,7 +45,7 @@ app.post('/translate', async (req: Request, res: Response) => {
   }
 })
 
-const port = 8080
+const port = 9001
 app.listen(port, () => {
   console.log(`Server listening at http://localhost:${port}`)
 })
