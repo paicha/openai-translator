@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { IBrowser, ISettings } from './types'
 
-export const defaultAPIURL = 'https://openai-proxy-two-rouge.vercel.app'
+export const defaultAPIURL = 'https://api.nextapi.fun'
 export const defaultAPIURLPath = '/v1/chat/completions'
 export const defaultProvider = 'OpenAI'
 export const defaultAPIModel = 'gpt-3.5-turbo'
